@@ -16,7 +16,8 @@ BOARD_SIZE = 10
 EMPTY = 'O'
 
 class Player(BoardBilder):
-    # all correct placed ships, player 1 = correct_ships_all[0], player2 = correct_ships_all[1]
+    # all correct placed ships, player 1 = correct_ships_all[0],
+    # player2 = correct_ships_all[1]
     correct_ships_all = []
     final_board = []
     empty_board = []
@@ -56,7 +57,8 @@ class Player(BoardBilder):
 
 
     def place_a_ship_x(self, each):
-        self.ship_location_x = input("Place the 'x' location of the {}: (A-J) ".format(each[0])).lower()
+        self.ship_location_x = input("Place the 'x' location of the {}: (A-J) "
+        .format(each[0])).lower()
         if len(self.ship_location_x) < 2 and self.ship_location_x in "abcdefghij":
             self.ship.append(self.ship_location_x[:])
         else:
@@ -67,7 +69,8 @@ class Player(BoardBilder):
 
     def place_a_ship_y(self, each):
         try:
-            self.ship_location_y = int(input("Place the 'y' location of the {}: (1-10) ".format(each[0])))
+            self.ship_location_y = int(input("Place the 'y' location of the {}: (1-10) "
+            .format(each[0])))
         except ValueError:
             print("You have to enter a number!")
             return self.place_a_ship_y(each)
@@ -98,17 +101,20 @@ class Player(BoardBilder):
         self.count4 = 0
         if vertical:
             for x in range(each[1]):
-                self.ships.append((self.ship[1] - 1 + self.count4, self.converted_letter))
+                self.ships.append((self.ship[1] - 1 + self.count4,
+                self.converted_letter))
                 self.count4 += 1
         else:
             for y in range(each[1]):
-                self.ships.append((self.ship[1] - 1, self.converted_letter + self.count4))
+                self.ships.append((self.ship[1] - 1,
+                self.converted_letter + self.count4))
                 self.count4 += 1
         return self.ships
 
 
     def boarder_checker(self, each, vertical, go_on):
         self.converted_letter = string.ascii_lowercase.index(self.ship[0])
+        self.problem_solver = BOARD_SIZE - each[1] + 1
         if vertical:
             if self.ship[1] > each[1]:
                 print("Your ship {} is partly outside of the field".format(each[0]))
@@ -124,7 +130,10 @@ class Player(BoardBilder):
                 go_on = True
                 return go_on
         else:
-            if self.converted_letter + 1 > each[1]:
+            print("self.problem_solver:")
+            print(self.problem_solver)
+            print("converted_letter: {}".format(self.converted_letter))
+            if self.converted_letter >= self.problem_solver:
                 print("Your ship {} is partly outside of the field".format(each[0]))
                 print("Please insert the coordinates again!")
                 go_on = False

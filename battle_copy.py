@@ -20,17 +20,24 @@ class Battle(Player):
         player2.shipyard()
 
 
-        self.empty_board, self.hitted_ships, self.missed_ships, self.sunked_ships, self.player_ship_copy, self.player_ship_copy_2 = player1.ahojky(player_ship = self.correct_ships_all[1])
-        self.empty_board, self.hitted_ships, self.missed_ships, self.sunked_ships, self.player_ship_copy, self.player_ship_copy_2 = player2.ahojky(player_ship = self.correct_ships_all[0])
+        (self.empty_board, self.hitted_ships, self.missed_ships,
+        self.sunked_ships, self.player_ship_copy, self.player_ship_copy_2) = player1.ahojky(
+        player_ship = self.correct_ships_all[1])
+        (self.empty_board, self.hitted_ships, self.missed_ships,
+        self.sunked_ships, self.player_ship_copy, self.player_ship_copy_2) = player2.ahojky(
+        player_ship = self.correct_ships_all[0])
 
         while not self.all_sunked:
             if not self.all_sunked:
-                self.hitted_ships, self.missed_ships, self.all_sunked, self.winner = player1.attack(self.empty_board, self.all_sunked, self.winner, self.hitted_ships, self.missed_ships, self.player_ship_copy, self.player_ship_copy_2, final_board_2 = self.final_board[0])
-                print("BLEEE _ 1:")
-                print(player1.final_board[0])
-                player1.print_board(self.final_board[0])
+                (self.hitted_ships, self.missed_ships,
+                self.all_sunked, self.winner) = player1.attack(
+                self.empty_board, self.all_sunked, self.winner, self.hitted_ships,
+                self.missed_ships, self.player_ship_copy, self.player_ship_copy_2)
             if not self.all_sunked:
-                self.hitted_ships, self.missed_ships, self.all_sunked, self.winner = player2.attack(self.empty_board, self.all_sunked, self.winner, self.hitted_ships, self.missed_ships, self.player_ship_copy, self.player_ship_copy_2, final_board_2 = self.final_board[1])
+                (self.hitted_ships, self.missed_ships,
+                self.all_sunked, self.winner) = player2.attack(
+                self.empty_board, self.all_sunked, self.winner, self.hitted_ships,
+                self.missed_ships, self.player_ship_copy, self.player_ship_copy_2)
             else:
                 pass
         print("Winner is: {}".format(self.winner))
@@ -43,25 +50,25 @@ class Battle(Player):
         self.hitted_ships = []
         self.sunked_ships = []
         self.missed_ships = []
-        return self.empty_board, self.hitted_ships, self.missed_ships, self.sunked_ships, self.player_ship_copy, self.player_ship_copy_2
+        return (self.empty_board, self.hitted_ships, self.missed_ships,
+                self.sunked_ships, self.player_ship_copy, self.player_ship_copy_2)
 
 
-    def attack(self, all_sunked, winner, hitted_ships, missed_ships, empty_board, player_ship_copy, player_ship_copy_2, final_board_2):
+    def attack(self, all_sunked, winner, hitted_ships, missed_ships, empty_board,
+               player_ship_copy, player_ship_copy_2):
         self.clear_screen()
-        print(final_board_2)
         ok = False
         while not ok:
             attack_ship_location_x = self.attack_place_a_ship_x()
             attack_ship_location_y = self.attack_place_a_ship_y()
             attack_loc_2, converted_letter, ok = self.attack_check(ok)
         hitted, ship_length = self.miss_or_hit(player_ship_copy, attack_loc_2, converted_letter)
-        self.missed_ships, self.player_ship_copy = self.position_remover(hitted, player_ship_copy, ship_length, attack_loc_2)
-        sunked, hitted, self.player_ship_copy = self.is_sunk(hitted, ship_length, player_ship_copy, player_ship_copy_2)
+        self.missed_ships, self.player_ship_copy = self.position_remover(hitted,
+        player_ship_copy, ship_length, attack_loc_2)
+        sunked, hitted, self.player_ship_copy = self.is_sunk(hitted, ship_length,
+        player_ship_copy, player_ship_copy_2)
         self.all_sunked, self.player_ship_copy, self.winner = self.testicek(player_ship_copy, winner)
         self.add_value_to_the_board(hitted, empty_board, sunked)
-        print("BLEEE:")
-        final_board_2 = self.add_value_to_the_board_2(hitted, sunked, final_board_2)
-        self.print_board(final_board_2)
         return self.hitted_ships, self.missed_ships, self.all_sunked, self.winner
 
 
@@ -69,7 +76,8 @@ class Battle(Player):
         # prompt y location a validate user input
         self.attack_loc = []
         print("{}, where do you want to shoot? :".format(self.name))
-        attack_ship_location_x = input("Place the 'x' location of the shoot (A-J) ").lower()
+        attack_ship_location_x = input(
+        "Place the 'x' location of the shoot (A-J) ").lower()
         if len(attack_ship_location_x) < 2 and attack_ship_location_x in "abcdefghij":
             self.attack_loc.append(attack_ship_location_x[:])
         else:
@@ -81,7 +89,8 @@ class Battle(Player):
     def attack_place_a_ship_y(self):
         # promp y location a validate user input
         try:
-            attack_ship_location_y = int(input("Place the 'y' location of the shoot (1-10) "))
+            attack_ship_location_y = int(
+            input("Place the 'y' location of the shoot (1-10) "))
         except ValueError:
             print("You have to enter a number!")
             return self.attack_place_a_ship_y()
@@ -141,7 +150,8 @@ class Battle(Player):
                 if val in self.player_ship_copy[count10][1]:
                     hitted = True
                     self.hitted_ships.append(self.attack_loc_2[:])
-                    print("Well Done! You hitted part of {}".format(self.player_ship_copy[count10][0]))
+                    print("Well Done! You hitted part of {}"
+                    .format(self.player_ship_copy[count10][0]))
                 else:
                     pass
             count10 += 1
@@ -218,35 +228,6 @@ class Battle(Player):
         print("OPPONENT'S BOARD:")
         self.print_board(self.empty_board)
 
-
-    def add_value_to_the_board_2(self, hitted, sunked, final_board_2):
-        #print(self.final_board_2)
-        ab = []
-        for x in self.attack_loc_2[0]:
-            ab.append(x)
-        a = ab[0]
-        b = ab[1]
-        if hitted:
-            final_board_2[a][b] = HIT
-        elif sunked:
-            cd = []
-            for x in self.sunked_ships:
-                for y in x:
-                    cd.append(y)
-            length = len(cd)
-            count = 0
-            while count < length:
-                count += 1
-                c = cd[count - 1][0]
-                d = cd[count - 1][1]
-                final_board_2[c][d] = SUNK
-        else:
-            final_board_2 = MISS
-
-        return final_board_2
-
-
-
-
-foo = Battle()
-foo.setup()
+if __name__ == "__main__":
+    foo = Battle()
+    foo.setup()
